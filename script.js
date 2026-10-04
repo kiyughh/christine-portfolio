@@ -530,7 +530,7 @@
 
         formData.append(
           "access_key",
-          "YOUR_WEB3FORMS_ACCESS_KEY"
+          "437eb70c-575f-4161-ac83-46f6794a6e1f"
         );
 
         formData.append("name", name);
