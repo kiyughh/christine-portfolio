@@ -3,9 +3,12 @@ const crypto = require("crypto");
 const MAX_NAME_LENGTH = 100;
 const MAX_EMAIL_LENGTH = 254;
 const MAX_MESSAGE_LENGTH = 2000;
+
 const COOLDOWN_SECONDS = 24 * 60 * 60;
+
 const IP_LIMIT = 8;
 const IP_WINDOW_SECONDS = 60 * 60;
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const GENERIC_ERROR =
@@ -51,6 +54,7 @@ async function redisCommand(parts) {
     /\/$/,
     ""
   );
+
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
   if (!baseUrl || !token) {
@@ -77,6 +81,7 @@ async function redisCommand(parts) {
 }
 
 module.exports = async function handler(req, res) {
+  // Only allow POST requests
   if (req.method !== "POST") {
     return sendJson(res, 405, {
       ok: false,
@@ -85,6 +90,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
+  // Parse request body
   let body;
 
   try {
@@ -99,9 +105,12 @@ module.exports = async function handler(req, res) {
 
   // Honeypot anti-spam field
   if (body.website) {
-    return sendJson(res, 200, { ok: true });
+    return sendJson(res, 200, {
+      ok: true
+    });
   }
 
+  // Get submitted values
   const name = String(body.name || "").trim();
   const email = String(body.email || "").trim().toLowerCase();
   const message = String(body.message || "").trim();
@@ -115,7 +124,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  // Maximum lengths
+  // Length limits
   if (
     name.length > MAX_NAME_LENGTH ||
     email.length > MAX_EMAIL_LENGTH ||
@@ -150,17 +159,25 @@ module.exports = async function handler(req, res) {
     });
   }
 
+  // Redis keys
   const emailKey = "contact:email:" + hashValue(email);
   const ipKey = "contact:ip:" + hashValue(getClientIp(req));
 
   let emailLockCreated = false;
 
   try {
-    // IP rate limit
+    // --------------------------------------------------
+    // IP RATE LIMIT
+    // --------------------------------------------------
+
     const ipCount = await redisCommand(["INCR", ipKey]);
 
     if (ipCount.result === 1) {
-      await redisCommand(["EXPIRE", ipKey, IP_WINDOW_SECONDS]);
+      await redisCommand([
+        "EXPIRE",
+        ipKey,
+        IP_WINDOW_SECONDS
+      ]);
     }
 
     if (ipCount.result > IP_LIMIT) {
@@ -171,7 +188,10 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // One successful submission per email every 24 hours
+    // --------------------------------------------------
+    // 24-HOUR EMAIL RESTRICTION
+    // --------------------------------------------------
+
     const emailLock = await redisCommand([
       "SET",
       emailKey,
@@ -191,24 +211,36 @@ module.exports = async function handler(req, res) {
 
     emailLockCreated = true;
 
-    // Send through Web3Forms
+    // --------------------------------------------------
+    // SEND TO WEB3FORMS
+    // --------------------------------------------------
+
+    const formData = new URLSearchParams();
+
+    formData.append("access_key", accessKey);
+    formData.append(
+      "subject",
+      "Portfolio inquiry from " + name
+    );
+    formData.append(
+      "from_name",
+      "Portfolio Contact Form"
+    );
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("message", message);
+    formData.append("replyto", email);
+
     const mailResponse = await fetch(
       "https://api.web3forms.com/submit",
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type":
+            "application/x-www-form-urlencoded",
           Accept: "application/json"
         },
-        body: JSON.stringify({
-          access_key: accessKey,
-          subject: "Portfolio inquiry from " + name,
-          from_name: "Portfolio Contact Form",
-          name: name,
-          email: email,
-          message: message,
-          replyto: email
-        })
+        body: formData.toString()
       }
     );
 
@@ -216,29 +248,44 @@ module.exports = async function handler(req, res) {
       return {};
     });
 
-    // Web3Forms rejected the submission
-if (!mailResponse.ok || !mailData.success) {
-  console.error("WEB3FORMS ERROR:", mailData);
+    // --------------------------------------------------
+    // WEB3FORMS ERROR
+    // --------------------------------------------------
 
-  throw new Error(
-    mailData.message || mailData.error || "mail_error"
-  );
-}
+    if (!mailResponse.ok || !mailData.success) {
+      console.error("WEB3FORMS ERROR:", mailData);
 
-    // Successful submission
+      throw new Error(
+        mailData.message ||
+          mailData.error ||
+          "mail_error"
+      );
+    }
+
+    // --------------------------------------------------
+    // SUCCESS
+    // --------------------------------------------------
+
     return sendJson(res, 200, {
       ok: true
     });
+
   } catch (error) {
     console.error("CONTACT FORM ERROR:", error);
 
-    // Remove the email lock if the email was not successfully sent.
+    // Remove email lock if sending failed.
     // This allows the user to retry.
     if (emailLockCreated) {
       try {
-        await redisCommand(["DEL", emailKey]);
+        await redisCommand([
+          "DEL",
+          emailKey
+        ]);
       } catch (cleanupError) {
-        console.error("REDIS CLEANUP ERROR:", cleanupError);
+        console.error(
+          "REDIS CLEANUP ERROR:",
+          cleanupError
+        );
       }
     }
 
