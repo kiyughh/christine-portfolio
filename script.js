@@ -24,30 +24,38 @@
   }
 
   const resumeLink = document.querySelector(".btn-resume");
+
   if (resumeLink) {
     resumeLink.addEventListener("click", function (event) {
       event.preventDefault();
+
       const fileUrl = resumeLink.getAttribute("href");
-      const fileName = resumeLink.getAttribute("download") || "resume.pdf";
+      const fileName =
+        resumeLink.getAttribute("download") || "resume.pdf";
 
       fetch(fileUrl)
         .then(function (response) {
           if (!response.ok) {
             throw new Error("resume_fetch_failed");
           }
+
           return response.arrayBuffer();
         })
         .then(function (buffer) {
           const blob = new Blob([buffer], {
             type: "application/octet-stream"
           });
+
           const objectUrl = URL.createObjectURL(blob);
           const tempLink = document.createElement("a");
+
           tempLink.href = objectUrl;
           tempLink.download = fileName;
+
           document.body.appendChild(tempLink);
           tempLink.click();
           tempLink.remove();
+
           URL.revokeObjectURL(objectUrl);
         })
         .catch(function () {
@@ -57,6 +65,7 @@
   }
 
   const projectList = document.querySelector(".project-list");
+
   if (projectList) {
     Array.prototype.slice
       .call(projectList.querySelectorAll(".project-card"))
@@ -85,7 +94,8 @@
         ).split(" ");
 
         const show =
-          filter === "all" || categories.indexOf(filter) !== -1;
+          filter === "all" ||
+          categories.indexOf(filter) !== -1;
 
         card.classList.toggle("is-hidden", !show);
       });
@@ -115,7 +125,9 @@
   let lightboxCloseTimer;
 
   function showLightboxImage(index) {
-    if (!lightboxImages.length || !lightboxImage) return;
+    if (!lightboxImages.length || !lightboxImage) {
+      return;
+    }
 
     lightboxIndex =
       (index + lightboxImages.length) % lightboxImages.length;
@@ -132,7 +144,9 @@
   }
 
   function closeImageLightbox() {
-    if (!imageLightbox || imageLightbox.hidden) return;
+    if (!imageLightbox || imageLightbox.hidden) {
+      return;
+    }
 
     imageLightbox.classList.remove("is-visible");
 
@@ -149,9 +163,17 @@
 
       lightboxImages = [];
 
-      if (lightboxPrev) lightboxPrev.hidden = true;
-      if (lightboxNext) lightboxNext.hidden = true;
-      if (lightboxCounter) lightboxCounter.hidden = true;
+      if (lightboxPrev) {
+        lightboxPrev.hidden = true;
+      }
+
+      if (lightboxNext) {
+        lightboxNext.hidden = true;
+      }
+
+      if (lightboxCounter) {
+        lightboxCounter.hidden = true;
+      }
 
       if (lastFocusedImage) {
         lastFocusedImage.focus();
@@ -161,7 +183,9 @@
   }
 
   function openImageLightbox(image) {
-    if (!imageLightbox || !lightboxImage) return;
+    if (!imageLightbox || !lightboxImage) {
+      return;
+    }
 
     window.clearTimeout(lightboxCloseTimer);
 
@@ -269,7 +293,10 @@
       });
 
       image.addEventListener("keydown", function (event) {
-        if (event.key === "Enter" || event.key === " ") {
+        if (
+          event.key === "Enter" ||
+          event.key === " "
+        ) {
           event.preventDefault();
           openImageLightbox(image);
         }
@@ -310,7 +337,10 @@
 
         dot.type = "button";
         dot.className = "carousel-dot";
-        dot.setAttribute("aria-label", "Go to image " + (i + 1));
+        dot.setAttribute(
+          "aria-label",
+          "Go to image " + (i + 1)
+        );
 
         dot.addEventListener("click", function () {
           show(i);
@@ -324,18 +354,25 @@
       index = (nextIndex + total) % total;
 
       slides.forEach(function (slide, i) {
-        slide.classList.toggle("is-active", i === index);
+        slide.classList.toggle(
+          "is-active",
+          i === index
+        );
       });
 
       if (counter) {
-        counter.textContent = index + 1 + " / " + total;
+        counter.textContent =
+          index + 1 + " / " + total;
       }
 
       if (dotsWrap) {
         Array.prototype.forEach.call(
           dotsWrap.children,
           function (dot, i) {
-            dot.classList.toggle("is-active", i === index);
+            dot.classList.toggle(
+              "is-active",
+              i === index
+            );
           }
         );
       }
@@ -381,7 +418,11 @@
             event.changedTouches[0].clientX - startX;
 
           if (Math.abs(dx) > 40) {
-            show(dx < 0 ? index + 1 : index - 1);
+            show(
+              dx < 0
+                ? index + 1
+                : index - 1
+            );
           }
         },
         { passive: true }
@@ -397,30 +438,50 @@
 
   /*
    * CONTACT FORM
-   * Sends directly to Web3Forms.
+   * Web3Forms direct submission
+   * Includes validation, honeypot protection,
+   * submit-button locking, and 60-second cooldown.
    */
 
   const contactForm = document.getElementById("contact-form");
 
   if (contactForm) {
-    const nameInput = document.getElementById("contact-name");
-    const emailInput = document.getElementById("contact-email");
-    const messageInput = document.getElementById("contact-message");
-    const websiteInput = document.getElementById("contact-website");
-    const submitBtn = document.getElementById("contact-submit");
-    const status = document.getElementById("contact-form-status");
+    const nameInput =
+      document.getElementById("contact-name");
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailInput =
+      document.getElementById("contact-email");
+
+    const messageInput =
+      document.getElementById("contact-message");
+
+    const websiteInput =
+      document.getElementById("contact-website");
+
+    const submitBtn =
+      document.getElementById("contact-submit");
+
+    const status =
+      document.getElementById(
+        "contact-form-status"
+      );
+
+    const emailPattern =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     const maxMessageLength = 2000;
 
     const fallbackError =
       "Sorry, your message could not be sent. Please try again or email me directly at christinemae.oro123@gmail.com.";
 
-    const duplicateMessage =
-      "You’ve already submitted a message. Please wait 24 hours before submitting another message.";
+    const cooldownSeconds = 60;
+
+    let cooldownTimer = null;
 
     function setStatus(message, type) {
-      if (!status) return;
+      if (!status) {
+        return;
+      }
 
       status.textContent = message;
 
@@ -435,17 +496,26 @@
     }
 
     function setInvalid(input, invalid) {
-      if (!input) return;
+      if (!input) {
+        return;
+      }
 
       if (invalid) {
-        input.setAttribute("aria-invalid", "true");
+        input.setAttribute(
+          "aria-invalid",
+          "true"
+        );
       } else {
-        input.removeAttribute("aria-invalid");
+        input.removeAttribute(
+          "aria-invalid"
+        );
       }
     }
 
     function setLoading(isLoading) {
-      if (!submitBtn) return;
+      if (!submitBtn) {
+        return;
+      }
 
       submitBtn.disabled = isLoading;
 
@@ -459,12 +529,51 @@
         : "Send Message";
     }
 
+    function startCooldown() {
+      if (!submitBtn) {
+        return;
+      }
+
+      let remaining = cooldownSeconds;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent =
+        "Wait " + remaining + "s";
+
+      window.clearInterval(cooldownTimer);
+
+      cooldownTimer = window.setInterval(
+        function () {
+          remaining -= 1;
+
+          if (remaining <= 0) {
+            window.clearInterval(
+              cooldownTimer
+            );
+
+            submitBtn.disabled = false;
+            submitBtn.textContent =
+              "Send Message";
+
+            return;
+          }
+
+          submitBtn.textContent =
+            "Wait " + remaining + "s";
+        },
+        1000
+      );
+    }
+
     contactForm.addEventListener(
       "submit",
-      async function (event) {
+      function (event) {
         event.preventDefault();
 
-        if (submitBtn && submitBtn.disabled) {
+        if (
+          submitBtn &&
+          submitBtn.disabled
+        ) {
           return;
         }
 
@@ -484,17 +593,22 @@
           ? websiteInput.value.trim()
           : "";
 
-        setInvalid(nameInput, !name);
+        setInvalid(
+          nameInput,
+          !name
+        );
 
         setInvalid(
           emailInput,
-          !email || !emailPattern.test(email)
+          !email ||
+            !emailPattern.test(email)
         );
 
         setInvalid(
           messageInput,
           !message ||
-            message.length > maxMessageLength
+            message.length >
+              maxMessageLength
         );
 
         if (!name || !email || !message) {
@@ -502,6 +616,7 @@
             "Please complete all fields before sending your message.",
             "is-error"
           );
+
           return;
         }
 
@@ -510,16 +625,31 @@
             "Please enter a valid email address.",
             "is-error"
           );
+
           return;
         }
 
-        if (message.length > maxMessageLength) {
+        if (
+          message.length >
+          maxMessageLength
+        ) {
           setStatus(
             "Please keep your message under " +
               maxMessageLength +
               " characters.",
             "is-error"
           );
+
+          return;
+        }
+
+        /*
+         * Honeypot protection.
+         * Legitimate visitors should leave this
+         * hidden field empty.
+         */
+        if (website) {
+          setStatus("", "");
           return;
         }
 
@@ -528,18 +658,29 @@
 
         const formData = new FormData();
 
+        /*
+         * KEEP YOUR WORKING WEB3FORMS ACCESS KEY HERE.
+         * Do not share the key publicly in chat.
+         */
         formData.append(
           "access_key",
           "437eb70c-575f-4161-ac83-46f6794a6e1f"
         );
 
-        formData.append("name", name);
-        formData.append("email", email);
-        formData.append("message", message);
+        formData.append(
+          "name",
+          name
+        );
 
-        if (website) {
-          formData.append("website", website);
-        }
+        formData.append(
+          "email",
+          email
+        );
+
+        formData.append(
+          "message",
+          message
+        );
 
         formData.append(
           "subject",
@@ -551,63 +692,73 @@
           "Christine's Portfolio"
         );
 
-        try {
-          const response = await fetch(
-            "https://api.web3forms.com/submit",
-            {
-              method: "POST",
-              body: formData
-            }
-          );
-
-          const data = await response.json();
-
-          if (data.success) {
-            setStatus(
-              "Message sent successfully! I'll get back to you as soon as possible.",
-              "is-success"
-            );
-
-            contactForm.reset();
-
-            setInvalid(nameInput, false);
-            setInvalid(emailInput, false);
-            setInvalid(messageInput, false);
-
-            return;
+        fetch(
+          "https://api.web3forms.com/submit",
+          {
+            method: "POST",
+            body: formData
           }
+        )
+          .then(function (response) {
+            return response
+              .json()
+              .then(function (data) {
+                return {
+                  ok: response.ok,
+                  data: data
+                };
+              });
+          })
+          .then(function (result) {
+            if (
+              result.ok &&
+              result.data &&
+              result.data.success
+            ) {
+              setStatus(
+                "Message sent successfully! I'll get back to you as soon as possible.",
+                "is-success"
+              );
 
-          if (
-            data.message &&
-            data.message
-              .toLowerCase()
-              .includes("duplicate")
-          ) {
+              contactForm.reset();
+
+              setInvalid(
+                nameInput,
+                false
+              );
+
+              setInvalid(
+                emailInput,
+                false
+              );
+
+              setInvalid(
+                messageInput,
+                false
+              );
+
+              setLoading(false);
+
+              startCooldown();
+
+              return;
+            }
+
+            setLoading(false);
+
             setStatus(
-              duplicateMessage,
+              fallbackError,
               "is-error"
             );
-            return;
-          }
+          })
+          .catch(function () {
+            setLoading(false);
 
-          throw new Error(
-            data.message || "Unable to send message."
-          );
-
-        } catch (error) {
-          console.error(
-            "Web3Forms error:",
-            error
-          );
-
-          setStatus(
-            fallbackError,
-            "is-error"
-          );
-
-        } finally {
-          setLoading(false);
-        }
+            setStatus(
+              fallbackError,
+              "is-error"
+            );
+          });
       }
     );
   }
