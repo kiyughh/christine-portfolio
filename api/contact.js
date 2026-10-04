@@ -217,11 +217,13 @@ module.exports = async function handler(req, res) {
     });
 
     // Web3Forms rejected the submission
-    if (!mailResponse.ok || !mailData.success) {
-      console.error("WEB3FORMS ERROR:", mailData);
+if (!mailResponse.ok || !mailData.success) {
+  console.error("WEB3FORMS ERROR:", mailData);
 
-      throw new Error("mail_error");
-    }
+  throw new Error(
+    mailData.message || mailData.error || "mail_error"
+  );
+}
 
     // Successful submission
     return sendJson(res, 200, {
