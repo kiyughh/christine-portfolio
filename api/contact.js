@@ -47,7 +47,10 @@ function parseBody(req) {
 }
 
 async function redisCommand(parts) {
-  const baseUrl = (process.env.UPSTASH_REDIS_REST_URL || "").replace(/\/$/, "");
+  const baseUrl = (process.env.UPSTASH_REDIS_REST_URL || "").replace(
+    /\/$/,
+    ""
+  );
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
   if (!baseUrl || !token) {
@@ -94,6 +97,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
+  // Honeypot anti-spam field
   if (body.website) {
     return sendJson(res, 200, { ok: true });
   }
@@ -102,6 +106,7 @@ module.exports = async function handler(req, res) {
   const email = String(body.email || "").trim().toLowerCase();
   const message = String(body.message || "").trim();
 
+  // Required fields
   if (!name || !email || !message) {
     return sendJson(res, 400, {
       ok: false,
@@ -110,6 +115,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
+  // Maximum lengths
   if (
     name.length > MAX_NAME_LENGTH ||
     email.length > MAX_EMAIL_LENGTH ||
@@ -122,6 +128,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
+  // Email validation
   if (!EMAIL_PATTERN.test(email)) {
     return sendJson(res, 400, {
       ok: false,
@@ -130,9 +137,12 @@ module.exports = async function handler(req, res) {
     });
   }
 
+  // Web3Forms Access Key
   const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
 
   if (!accessKey) {
+    console.error("CONTACT FORM ERROR: missing_web3forms_config");
+
     return sendJson(res, 500, {
       ok: false,
       error: "missing_config",
@@ -146,6 +156,7 @@ module.exports = async function handler(req, res) {
   let emailLockCreated = false;
 
   try {
+    // IP rate limit
     const ipCount = await redisCommand(["INCR", ipKey]);
 
     if (ipCount.result === 1) {
@@ -160,6 +171,7 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    // One successful submission per email every 24 hours
     const emailLock = await redisCommand([
       "SET",
       emailKey,
@@ -179,6 +191,7 @@ module.exports = async function handler(req, res) {
 
     emailLockCreated = true;
 
+    // Send through Web3Forms
     const mailResponse = await fetch(
       "https://api.web3forms.com/submit",
       {
@@ -203,23 +216,33 @@ module.exports = async function handler(req, res) {
       return {};
     });
 
+    // Web3Forms rejected the submission
     if (!mailResponse.ok || !mailData.success) {
+      console.error("WEB3FORMS ERROR:", mailData);
+
       throw new Error("mail_error");
     }
 
-    return sendJson(res, 200, { ok: true });
+    // Successful submission
+    return sendJson(res, 200, {
+      ok: true
+    });
   } catch (error) {
+    console.error("CONTACT FORM ERROR:", error);
+
+    // Remove the email lock if the email was not successfully sent.
+    // This allows the user to retry.
     if (emailLockCreated) {
       try {
         await redisCommand(["DEL", emailKey]);
       } catch (cleanupError) {
-        // Keep the original error response if cleanup fails.
+        console.error("REDIS CLEANUP ERROR:", cleanupError);
       }
     }
 
     return sendJson(res, 500, {
       ok: false,
-      error: "server_error",
+      error: error.message || "server_error",
       message: GENERIC_ERROR
     });
   }
