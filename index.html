@@ -1,546 +1,765 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Christine Mae P. Oro — Portfolio</title>
-  <meta name="description" content="Portfolio of Christine Mae P. Oro, BSIT graduate — virtual assistance, data entry, graphic design, and web development.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header class="site-header">
-    <div class="header-inner">
-      <a class="logo" href="#home">Christine Mae P. Oro</a>
-      <nav class="site-nav" id="site-nav" aria-label="Primary">
-        <ul class="nav-list">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-      <div class="header-actions">
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
-          <span class="nav-toggle-bar"></span>
-          <span class="nav-toggle-bar"></span>
-          <span class="nav-toggle-bar"></span>
-        </button>
-        <a class="btn-resume" href="resume.pdf" download="Christine-Mae-Oro-Resume.pdf">Download Resume</a>
-      </div>
-    </div>
-  </header>
+(function () {
+  const navToggle = document.querySelector(".nav-toggle");
+  const siteNav = document.querySelector(".site-nav");
+  const yearEl = document.getElementById("year");
 
-  <main>
-    <section class="section home" id="home">
-<div class="container home-inner">
-  <br>
-  <h1>Christine Mae P. Oro</h1>
-  <p class="role">IT Graduate | VA | Data Entry Specialist | Graphic Designer | Web Developer</p>
-  <p class="intro">
-     Information Technology graduate with hands-on internship experience in data management, 
-     recruitment coordination, IT support, and UI/UX design. Skilled in Microsoft Office, 
-     Google Workspace, Figma, Canva, and front-end web development. Seeking opportunities 
-     in remote operations, IT support, or digital design.
-  </p>
-<br>
-  <div class="hero-actions">
-    <a class="btn btn-primary" href="#contact">Hire me</a>
-    <a class="btn btn-ghost" href="#projects">View my work</a>
-  </div>
-<br>
-<br>
-</div>
-    </section>
+  if (yearEl) {
+    yearEl.textContent = String(new Date().getFullYear());
+  }
 
-    <section class="section about" id="about">
-      <div class="container">
-        <h2 class="section-title">About Me</h2>
-        <div class="about-grid">
-          <figure class="about-photo">
-            <!-- Replace images/profile.jpg with your photo -->
-            <img src="images/profile.jpg" alt="Christine Mae P. Oro">
-          </figure>
-          <div class="about-copy">
-            <h3>Christine Mae P. Oro</h3>
-            <p>
-              I’m Christine Mae Oro, a 22-year-old BSIT graduate. I’m interested in Virtual Assistance, UI/UX Design, Graphic Design, Web Design, and IT. I enjoy creating clean and user-friendly designs while continuously learning new skills.
-            </p>
-            <div class="about-meta">
-              <br>
-              <p><strong>Location</strong><br>Misamis Occidental, Philippines</p>
-              <p><strong>Education</strong><br>Bachelor of Science in Information Technology<br>Misamis University</p>
-              <p><strong>Languages</strong><br>English • Filipino • Cebuano</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+  if (navToggle && siteNav) {
+    navToggle.addEventListener("click", function () {
+      const open = siteNav.classList.toggle("is-open");
+      navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    });
 
-    <section class="section skills" id="skills">
-      <div class="container">
-        <h2 class="section-title">Skills</h2>
-        <div class="skills-grid">
-          <article class="skill-group">
-            <h3>Administrative &amp; Support</h3>
-            <ul>
-              <li>Data Entry</li>
-              <li>Data Management</li>
-              <li>Record Keeping</li>
-              <li>Administrative Support</li>
-            </ul>
-          </article>
-          <article class="skill-group">
-            <h3>Productivity Tools</h3>
-            <ul>
-              <li>Microsoft Word</li>
-              <li>Microsoft Excel</li>
-              <li>Microsoft PowerPoint</li>
-              <li>Google Docs</li>
-              <li>Google Sheets</li>
-              <li>Google Drive</li>
-            </ul>
-          </article>
-          <article class="skill-group">
-            <h3>Technical</h3>
-            <ul>
-              <li>HTML</li>
-              <li>CSS</li>
-              <li>JavaScript</li>
-              <li>PHP</li>
-              <li>MySQL</li>
-              <li>Python</li>
-              <li>Figma (UI/UX Design)</li>
-              <li>Basic Hardware Troubleshooting</li>
-            </ul>
-          </article>
-          <article class="skill-group">
-            <h3>Soft Skills</h3>
-            <ul>
-              <li>Attention to Detail</li>
-              <li>Organization</li>
-              <li>Time Management</li>
-              <li>Problem Solving</li>
-              <li>Adaptability</li>
-              <li>Written Communication</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
+    siteNav.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        siteNav.classList.remove("is-open");
+        navToggle.setAttribute("aria-expanded", "false");
+        navToggle.setAttribute("aria-label", "Open menu");
+      });
+    });
+  }
 
-    <section class="section experience" id="experience">
-      <div class="container">
-        <h2 class="section-title">Experience</h2>
-        <article class="experience-card">
-          <p class="experience-role">IT Support Intern</p>
-          <p class="experience-org">Connections Outsourcing — Mandaue City, Cebu</p>
-          <p class="experience-dates">Feb 2026 – Apr 2026</p>
-          <ul class="experience-list">
-            <li>Managed applicant records by entering, updating, and verifying data in the company database.</li>
-            <li>Supported candidate assessments by guiding applicants and monitoring assessment sessions.</li>
-            <li>Coordinated with the Account Director regarding applicant results and application status.</li>
-            <li>Organized employee contract documents and prepared paperwork for signing.</li>
-            <li>Troubleshot basic hardware issues involving computers, headsets, cameras, and other peripherals.</li>
-            <li>Performed system and security updates to keep office computers up to date.</li>
-          </ul>
-        </article>
-      </div>
-    </section>
+  const resumeLink = document.querySelector(".btn-resume");
 
-    <section class="section projects" id="projects">
-      <div class="container">
-        <h2 class="section-title">Projects</h2>
+  if (resumeLink) {
+    resumeLink.addEventListener("click", function (event) {
+      event.preventDefault();
 
-        <div class="project-filters" role="tablist" aria-label="Filter projects">
-          <button type="button" class="filter-btn is-active" data-filter="all">All</button>
-          <button type="button" class="filter-btn" data-filter="graphic">Graphic Design</button>
-          <button type="button" class="filter-btn" data-filter="uiux">UI/UX</button>
-          <button type="button" class="filter-btn" data-filter="web">Web Design</button>
-          <button type="button" class="filter-btn" data-filter="iot">IT / IoT</button>
-        </div>
+      const fileUrl = resumeLink.getAttribute("href");
+      const fileName =
+        resumeLink.getAttribute("download") || "resume.pdf";
 
-        <div class="project-list">
+      fetch(fileUrl)
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("resume_fetch_failed");
+          }
 
-          <article class="project-card" data-categories="uiux" data-project-order="1">
-            <div class="carousel" data-carousel tabindex="0" aria-label="Mobile App UI/UX Design / SaaS Product Design gallery">
-              <div class="carousel-viewport">
-                <!-- Replace images/projects/saas-1.jpg through saas-4.jpg with your screenshots -->
-                <figure class="carousel-slide is-active">
-                  <img src="images/projects/saas-1.jpg" alt="SaaS product design screen 1">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/saas-2.jpg" alt="SaaS product design screen 2">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/saas-3.jpg" alt="SaaS product design screen 3">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/saas-4.jpg" alt="SaaS product design screen 4">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/saas-5.jpg" alt="SaaS product design screen 4">
-                </figure>
-              </div>
-              <div class="carousel-controls">
-                <button type="button" class="carousel-btn carousel-prev" aria-label="Previous image">←</button>
-                <button type="button" class="carousel-btn carousel-next" aria-label="Next image">→</button>
-                <p class="carousel-counter" aria-live="polite"></p>
-                <div class="carousel-dots"></div>
-              </div>
-            </div>
-            <div class="project-meta">
-              <h3 class="project-title">Mobile App UI / UX Design / SaaS Product Design</h3>
-              <p class="project-category">UI/UX Design / SaaS Product Design</p>
-              <p class="project-overview"><span>Project Overview.</span> A personal UI/UX and SaaS design concept created to explore product design, user flows, and interactive prototypes. The content and features are fictional and created for practice and portfolio purposes.</p>
-              <p class="project-tools"><span>Tools Used.</span> Figma / Canva</p>
-            </div>
-          </article>
+          return response.arrayBuffer();
+        })
+        .then(function (buffer) {
+          const blob = new Blob([buffer], {
+            type: "application/octet-stream"
+          });
 
-          <article class="project-card" data-categories="uiux" data-project-order="9">
-            <div class="carousel" data-carousel tabindex="0" aria-label="E-Notes Organizer app design gallery">
-              <div class="carousel-viewport">
-                <figure class="carousel-slide is-active">
-                  <img src="images/projects/e-notes-1.jpg" alt="E-Notes Organizer home screen">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/e-notes-2.jpg" alt="E-Notes Organizer notes screen">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/e-notes-3.jpg" alt="E-Notes Organizer documents screen">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/e-notes-4.jpg" alt="E-Notes Organizer tasks screen">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/e-notes-5.jpg" alt="E-Notes Organizer file management screen">
-                </figure>
-              </div>
-              <div class="carousel-controls">
-                <button type="button" class="carousel-btn carousel-prev" aria-label="Previous image">←</button>
-                <button type="button" class="carousel-btn carousel-next" aria-label="Next image">→</button>
-                <p class="carousel-counter" aria-live="polite"></p>
-                <div class="carousel-dots"></div>
-              </div>
-            </div>
-            <div class="project-meta">
-              <h3 class="project-title">E-Notes Organizer</h3>
-              <p class="project-category">UI/UX Design</p>
-              <p class="project-overview"><span>Project Overview.</span> An academic mobile app design project created independently to explore a simple and user-friendly way to organize notes, documents, and tasks.</p>
-              <p class="project-tools"><span>Tools Used.</span> Figma</p>
-            </div>
-          </article>
+          const objectUrl = URL.createObjectURL(blob);
+          const tempLink = document.createElement("a");
 
-          <article class="project-card" data-categories="graphic" data-project-order="3">
-            <div class="carousel" data-carousel tabindex="0" aria-label="Chocolate Product Advertisement gallery">
-              <div class="carousel-viewport">
-                <figure class="carousel-slide is-active">
-                  <img src="images/projects/chocolate.jpg" alt="Chocolate product advertisement 1">
-                </figure>
-              </div>
-              <div class="carousel-controls">
-                <button type="button" class="carousel-btn carousel-prev" aria-label="Previous image">←</button>
-                <button type="button" class="carousel-btn carousel-next" aria-label="Next image">→</button>
-                <p class="carousel-counter" aria-live="polite"></p>
-                <div class="carousel-dots"></div>
-              </div>
-            </div>
-            <div class="project-meta">
-              <h3 class="project-title">Chocolate Product Advertisement</h3>
-              <p class="project-category">Graphic Design</p>
-              <p class="project-overview"><span>Project Overview.</span> A personal product advertisement concept created to practice promotional graphic design, product presentation, composition, and visual hierarchy. The design was created as a portfolio sample and was not commissioned by a client.</p>
-              <p class="project-tools"><span>Tools Used.</span> Canva</p>
-            </div>
-          </article>
+          tempLink.href = objectUrl;
+          tempLink.download = fileName;
 
-          <article class="project-card" data-categories="graphic" data-project-order="2">
-            <div class="carousel" data-carousel tabindex="0" aria-label="Dior Prestige Email Campaign gallery">
-              <div class="carousel-viewport">
-                <figure class="carousel-slide is-active">
-                  <img src="images/projects/dior.jpg" alt="Dior Prestige email campaign page 1">
-                </figure>
-              </div>
-              <div class="carousel-controls">
-                <button type="button" class="carousel-btn carousel-prev" aria-label="Previous image">←</button>
-                <button type="button" class="carousel-btn carousel-next" aria-label="Next image">→</button>
-                <p class="carousel-counter" aria-live="polite"></p>
-                <div class="carousel-dots"></div>
-              </div>
-            </div>
-            <div class="project-meta">
-              <h3 class="project-title">Dior Prestige Email Campaign</h3>
-              <p class="project-category">Graphic Design</p>
-              <p class="project-overview"><span>Project Overview.</span> A personal email campaign design concept inspired by luxury beauty branding. Created as a portfolio practice project to explore promotional email layouts, visual hierarchy, and product presentation. This is not an official Dior project.</p>
-              <p class="project-tools"><span>Tools Used.</span> Canva</p>
-            </div>
-          </article>
+          document.body.appendChild(tempLink);
+          tempLink.click();
+          tempLink.remove();
 
-          <article class="project-card" data-categories="uiux web" data-project-order="8">
-            <div class="carousel" data-carousel tabindex="0" aria-label="Scented Candle E-Commerce Web Design gallery">
-              <div class="carousel-viewport">
-                <figure class="carousel-slide is-active">
-                  <img src="images/projects/candle-ui-1.jpg" alt="Scented candle e-commerce screen 1">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/candle-ui-2.jpg" alt="Scented candle e-commerce screen 2">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/candle-ui-3.jpg" alt="Scented candle e-commerce screen 3">
-                </figure>
-              </div>
-              <div class="carousel-controls">
-                <button type="button" class="carousel-btn carousel-prev" aria-label="Previous image">←</button>
-                <button type="button" class="carousel-btn carousel-next" aria-label="Next image">→</button>
-                <p class="carousel-counter" aria-live="polite"></p>
-                <div class="carousel-dots"></div>
-              </div>
-            </div>
-            <div class="project-meta">
-              <h3 class="project-title">Scented Candle E-Commerce Web Design</h3>
-              <p class="project-category">UI/UX Design</p>
-              <p class="project-overview"><span>Project Overview.</span> An academic e-commerce web design project created independently to explore product presentation, website structure, navigation, and user experience for a scented candle brand. The design includes an interactive prototype with selected pages presented in this portfolio.</p>
-              <p class="project-tools"><span>Tools Used.</span> Figma</p>
-            </div>
-          </article>
+          URL.revokeObjectURL(objectUrl);
+        })
+        .catch(function () {
+          window.location.href = fileUrl;
+        });
+    });
+  }
 
-          <article class="project-card" data-categories="graphic" data-project-order="4">
-            <div class="carousel" data-carousel tabindex="0" aria-label="Candle Advertisement gallery">
-              <div class="carousel-viewport">
-                <!-- Replace images/projects/candle-ad-1.jpg and candle-ad-2.jpg with your designs -->
-                <figure class="carousel-slide is-active">
-                  <img src="images/projects/candle-ad-1.jpg" alt="Candle advertisement 1">
-                </figure>
-              </div>
-              <div class="carousel-controls">
-                <button type="button" class="carousel-btn carousel-prev" aria-label="Previous image">←</button>
-                <button type="button" class="carousel-btn carousel-next" aria-label="Next image">→</button>
-                <p class="carousel-counter" aria-live="polite"></p>
-                <div class="carousel-dots"></div>
-              </div>
-            </div>
-            <div class="project-meta">
-              <h3 class="project-title">Candle Advertisement</h3>
-              <p class="project-category">Graphic Design</p>
-              <p class="project-overview"><span>Project Overview.</span> A personal product advertisement concept created to practice promotional design, product presentation, composition, and visual appeal. The design was created as a portfolio sample and was not commissioned by a client.</p>
-              <p class="project-tools"><span>Tools Used.</span> Canva</p>
-            </div>
-          </article>
+  const projectList = document.querySelector(".project-list");
 
-          <article class="project-card" data-categories="uiux web" data-project-order="7">
-            <div class="carousel" data-carousel tabindex="0" aria-label="Escafe E-Commerce Web Design gallery">
-              <div class="carousel-viewport">
-                <!-- Replace images/projects/escafe-1.jpg through escafe-3.jpg with your Figma screens -->
-                <figure class="carousel-slide is-active">
-                  <img src="images/projects/escafe-1.jpg" alt="Escafe e-commerce screen 1">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/escafe-2.jpg" alt="Escafe e-commerce screen 2">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/escafe-3.jpg" alt="Escafe e-commerce screen 3">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/escafe-4.jpg" alt="Escafe e-commerce screen 4">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/escafe-5.jpg" alt="Escafe e-commerce screen 5">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/escafe-6.jpg" alt="Escafe e-commerce screen 6">
-                </figure>
-              </div>
-              <div class="carousel-controls">
-                <button type="button" class="carousel-btn carousel-prev" aria-label="Previous image">←</button>
-                <button type="button" class="carousel-btn carousel-next" aria-label="Next image">→</button>
-                <p class="carousel-counter" aria-live="polite"></p>
-                <div class="carousel-dots"></div>
-              </div>
-            </div>
-            <div class="project-meta">
-              <h3 class="project-title">Escafe E-Commerce Web Design</h3>
-              <p class="project-category">UI/UX Design</p>
-              <p class="project-overview"><span>Project Overview.</span> A collaborative academic e-commerce web design project focused on product presentation, website structure, navigation, and user experience. The project includes an interactive prototype, with selected pages presented in this portfolio. Created as part of an academic project with a project partner.</p>
-              <p class="project-tools"><span>Tools Used.</span> Figma / Vector</p>
-            </div>
-          </article>
+  if (projectList) {
+    Array.prototype.slice
+      .call(projectList.querySelectorAll(".project-card"))
+      .sort(function (a, b) {
+        return (
+          Number(a.getAttribute("data-project-order")) -
+          Number(b.getAttribute("data-project-order"))
+        );
+      })
+      .forEach(function (card) {
+        projectList.appendChild(card);
+      });
+  }
 
-          <article class="project-card" data-categories="graphic" data-project-order="5">
-            <div class="carousel" data-carousel tabindex="0" aria-label="Kindergarten Readiness Workbook gallery">
-              <div class="carousel-viewport">
-                <!-- Replace images/projects/workbook-1.jpg through workbook-4.jpg with selected representative pages -->
-                <figure class="carousel-slide is-active">
-                  <img src="images/projects/workbook-1.jpg" alt="Kindergarten readiness workbook page 1">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/workbook-2.jpg" alt="Kindergarten readiness workbook page 2">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/workbook-3.jpg" alt="Kindergarten readiness workbook page 3">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/workbook-4.jpg" alt="Kindergarten readiness workbook page 4">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/workbook-5.jpg" alt="Kindergarten readiness workbook page 4">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/workbook-6.jpg" alt="Kindergarten readiness workbook page 4">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/workbook-7.jpg" alt="Kindergarten readiness workbook page 4">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/workbook-8.jpg" alt="Kindergarten readiness workbook page 4">
-                </figure>
-                 <figure class="carousel-slide">
-                  <img src="images/projects/workbook-9.jpg" alt="Kindergarten readiness workbook page 4">
-                </figure>
-              </div>
-              <div class="carousel-controls">
-                <button type="button" class="carousel-btn carousel-prev" aria-label="Previous image">←</button>
-                <button type="button" class="carousel-btn carousel-next" aria-label="Next image">→</button>
-                <p class="carousel-counter" aria-live="polite"></p>
-                <div class="carousel-dots"></div>
-              </div>
-            </div>
-            <div class="project-meta">
-              <h3 class="project-title">Kindergarten Readiness Workbook</h3>
-              <p class="project-category">Graphic Design / Digital Product</p>
-              <p class="project-overview"><span>Project Overview.</span> A personal printable educational workbook featuring 80 pages of activities for children ages 3–4. I developed the stories and activity content while using AI-assisted tools during parts of the design and formatting process.</p>
-              <p class="project-tools"><span>Tools Used.</span> Canva / ChatGPT / Gemini / Claude</p>
-            </div>
-          </article>
+  document.querySelectorAll(".filter-btn").forEach(function (button) {
+    button.addEventListener("click", function () {
+      const filter = button.getAttribute("data-filter");
 
-          <article class="project-card" data-categories="iot" data-project-order="6">
-            <div class="carousel" data-carousel tabindex="0" aria-label="IoT retractable roof system gallery">
-              <div class="carousel-viewport">
-                <!-- Replace images/projects/capstone-1.jpg through capstone-4.jpg with prototype, hardware, sensors, app, or interface photos -->
-                <figure class="carousel-slide is-active">
-                  <img src="images/projects/capstone-1.png" alt="IoT retractable roof system image 1">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/capstone-2.png" alt="IoT retractable roof system image 2">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/capstone-3.png" alt="IoT retractable roof system image 3">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/capstone-4.png" alt="IoT retractable roof system image 4">
-                </figure>
-                <figure class="carousel-slide">
-                  <img src="images/projects/capstone-5.png" alt="IoT retractable roof system image 4">
-                </figure>
-              </div>
-              <div class="carousel-controls">
-                <button type="button" class="carousel-btn carousel-prev" aria-label="Previous image">←</button>
-                <button type="button" class="carousel-btn carousel-next" aria-label="Next image">→</button>
-                <p class="carousel-counter" aria-live="polite"></p>
-                <div class="carousel-dots"></div>
-              </div>
-            </div>
-            <div class="project-meta">
-              <h3 class="project-title">IoT-Based Retractable Roof System for Rice Drying Areas</h3>
-              <p class="project-category">IT / IoT / Capstone Project</p>
-              <p class="project-overview"><span>Project Overview.</span> A collaborative academic capstone project focused on developing an IoT-based retractable roof system to help protect rice from unpredictable rainfall. I worked with a project partner to develop and present the system, which uses ESP32, Flutter, PHP REST API, MySQL, a rain sensor, and BH1750/LDR.</p>
-              <p class="project-tools"><span>Tools Used.</span> ESP32 • Flutter • PHP • MySQL</p>
-            </div>
-          </article>
+      document.querySelectorAll(".filter-btn").forEach(function (btn) {
+        btn.classList.toggle("is-active", btn === button);
+      });
 
-        </div>
-      </div>
-    </section>
+      document.querySelectorAll(".project-card").forEach(function (card) {
+        const categories = (
+          card.getAttribute("data-categories") || ""
+        ).split(" ");
 
-    <section class="section contact" id="contact">
-      <div class="container contact-inner">
-        <div class="contact-info">
-          <h2 class="section-title">Interested in working with me?</h2>
-          <p class="contact-lead">Feel free to reach out if you have an opportunity, project, or question. I’d be happy to connect.</p>
+        const show =
+          filter === "all" ||
+          categories.indexOf(filter) !== -1;
 
-          <div class="contact-detail">
-            <span class="detail-label">Email</span>
-            <a href="mailto:christinemae.oro123@gmail.com">christinemae.oro123@gmail.com</a>
-          </div>
+        card.classList.toggle("is-hidden", !show);
+      });
+    });
+  });
 
-          <div class="contact-socials">
-            <a class="contact-item" href="https://wa.me/639764455866" target="_blank" rel="noopener noreferrer">
-              <span class="contact-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                  <path d="M12.04 2C6.5 2 2 6.42 2 11.88c0 2.08.62 4.07 1.72 5.77L2.16 21l3.5-1.53A9.88 9.88 0 0 0 12.04 22C17.58 22 22 17.58 22 11.88S17.58 2 12.04 2Zm5.09 14.1c-.2.59-1.17 1.06-1.73 1.15-.46.08-.95.12-1.46-.06-.4-.13-.96-.35-1.66-.7a12.07 12.07 0 0 1-2.24-1.86 11.9 11.9 0 0 1-1.52-1.95c-.3-.45-.22-.89.15-1.38.17-.22.37-.45.53-.67.17-.22.23-.4.35-.66.12-.26.06-.5-.03-.72-.1-.21-.7-1.7-.96-2.34-.25-.61-.5-.52-.7-.52l-.6-.01c-.21 0-.57.08-.86.4-.29.32-.99.97-.99 2.36 0 1.39 1.02 2.74 1.15 2.94.14.2 2 3.14 4.86 4.4.68.29 1.22.47 1.64.6.68.22 1.3.19 1.8.12.55-.08 1.67-.67 1.9-1.33.23-.66.23-1.24.16-1.36Z"/>
-                </svg>
-              </span>
-              <span class="contact-item-text">
-                <strong>WhatsApp</strong>
-                <small>+63 976 445 5866</small>
-              </span>
-            </a>
+  const imageLightbox = document.getElementById("image-lightbox");
+  const lightboxImage = imageLightbox
+    ? imageLightbox.querySelector(".image-lightbox-image")
+    : null;
+  const lightboxClose = imageLightbox
+    ? imageLightbox.querySelector(".image-lightbox-close")
+    : null;
+  const lightboxPrev = imageLightbox
+    ? imageLightbox.querySelector(".image-lightbox-prev")
+    : null;
+  const lightboxNext = imageLightbox
+    ? imageLightbox.querySelector(".image-lightbox-next")
+    : null;
+  const lightboxCounter = imageLightbox
+    ? imageLightbox.querySelector(".image-lightbox-counter")
+    : null;
 
-            <a class="contact-item" href="https://www.linkedin.com/in/christine-mae-oro-2003xx" target="_blank" rel="noopener noreferrer">
-              <span class="contact-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                  <path d="M6.94 8.5A1.56 1.56 0 1 1 6.94 5.4a1.56 1.56 0 0 1 0 3.1ZM5.42 9.64h3.05V18H5.42V9.64Zm5.09 0h2.92v1.14h.04c.41-.77 1.4-1.58 2.87-1.58 3.08 0 3.64 2.02 3.64 4.66V18h-3.05v-16.85h3.05v-1.72h-4.65v1.72h-1.82v-1.72H10.51v1.72h1.82v16.85H10.51V9.64Z"/>
-                </svg>
-              </span>
-              <span class="contact-item-text">
-                <strong>LinkedIn</strong>
-                <small>www.linkedin.com/in/christine-mae-oro-2003xx</small>
-              </span>
-            </a>
+  let lastFocusedImage = null;
+  let lightboxImages = [];
+  let lightboxIndex = 0;
+  let lightboxCloseTimer;
 
-            <a class="contact-item" href="https://www.onlinejobs.ph/jobseekers/info/5115941" target="_blank" rel="noopener noreferrer">
-              <span class="contact-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                  <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 1.8a8.2 8.2 0 0 1 5.75 2.35H12v2.78H7.57A8.2 8.2 0 0 1 12 3.8Zm-5.52 9.7h5.86v2.7H7.62A8.17 8.17 0 0 1 6.48 13.5Zm6.79 6.7a8.16 8.16 0 0 1-5.77-2.34h5.77v2.34Zm7.2-8.5h-5.52V9.1h5.52a8.18 8.18 0 0 1-.29 2.5Zm-8.5-4.9v2.7H5.82a8.2 8.2 0 0 1 6.95-2.7Zm0 9.8v2.7a8.2 8.2 0 0 1-7.04-2.7h7.04Zm8.15 3.5a8.2 8.2 0 0 1-6.95 2.7v-2.7h6.95Z"/>
-                </svg>
-              </span>
-              <span class="contact-item-text">
-                <strong>OnlineJobs.ph</strong>
-                <small>https://www.onlinejobs.ph/jobseekers/info/5115941</small>
-              </span>
-            </a>
-          </div>
-        </div>
+  function showLightboxImage(index) {
+    if (!lightboxImages.length || !lightboxImage) {
+      return;
+    }
 
-        <form class="contact-form" id="contact-form" novalidate>
-          <div class="hp-field" aria-hidden="true">
-            <label for="contact-website">Website</label>
-            <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off">
-          </div>
+    lightboxIndex =
+      (index + lightboxImages.length) % lightboxImages.length;
 
-          <label for="contact-name">Name</label>
-          <input id="contact-name" name="name" type="text" autocomplete="name" maxlength="100" required aria-describedby="contact-form-status">
+    const image = lightboxImages[lightboxIndex];
 
-          <label for="contact-email">Email</label>
-          <input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required aria-describedby="contact-form-status">
+    lightboxImage.src = image.src;
+    lightboxImage.alt = image.alt;
 
-          <label for="contact-message">Message</label>
-          <textarea id="contact-message" name="message" rows="6" maxlength="2000" required aria-describedby="contact-form-status"></textarea>
+    if (lightboxCounter) {
+      lightboxCounter.textContent =
+        lightboxIndex + 1 + " / " + lightboxImages.length;
+    }
+  }
 
-          <button class="send-btn" id="contact-submit" type="submit">Send Message</button>
-          <p class="form-status" id="contact-form-status" role="status" aria-live="polite"></p>
-        </form>
-      </div>
-    </section>
-  </main>
+  function closeImageLightbox() {
+    if (!imageLightbox || imageLightbox.hidden) {
+      return;
+    }
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>Christine Mae P. Oro</p>
-      <p>&copy; <span id="year"></span> Christine Mae P. Oro. All rights reserved.</p>
-    </div>
-  </footer>
+    imageLightbox.classList.remove("is-visible");
 
-  <div class="image-lightbox" id="image-lightbox" role="dialog" aria-modal="true" aria-label="Project image viewer" aria-hidden="true" hidden>
-    <button class="image-lightbox-close" type="button" aria-label="Close image viewer">&times;</button>
-    <button class="image-lightbox-nav image-lightbox-prev" type="button" aria-label="Previous project image" hidden>←</button>
-    <img class="image-lightbox-image" alt="">
-    <button class="image-lightbox-nav image-lightbox-next" type="button" aria-label="Next project image" hidden>→</button>
-    <p class="image-lightbox-counter" aria-live="polite" hidden></p>
-  </div>
+    window.clearTimeout(lightboxCloseTimer);
 
-  <script src="script.js"></script>
-</body>
-</html>
+    lightboxCloseTimer = window.setTimeout(function () {
+      imageLightbox.hidden = true;
+      imageLightbox.setAttribute("aria-hidden", "true");
+
+      if (lightboxImage) {
+        lightboxImage.removeAttribute("src");
+        lightboxImage.alt = "";
+      }
+
+      lightboxImages = [];
+
+      if (lightboxPrev) {
+        lightboxPrev.hidden = true;
+      }
+
+      if (lightboxNext) {
+        lightboxNext.hidden = true;
+      }
+
+      if (lightboxCounter) {
+        lightboxCounter.hidden = true;
+      }
+
+      if (lastFocusedImage) {
+        lastFocusedImage.focus();
+        lastFocusedImage = null;
+      }
+    }, 180);
+  }
+
+  function openImageLightbox(image) {
+    if (!imageLightbox || !lightboxImage) {
+      return;
+    }
+
+    window.clearTimeout(lightboxCloseTimer);
+
+    lastFocusedImage = image;
+
+    const carousel = image.closest("[data-carousel]");
+
+    lightboxImages = carousel
+      ? Array.prototype.slice.call(
+          carousel.querySelectorAll(".carousel-slide img")
+        )
+      : [image];
+
+    lightboxIndex = lightboxImages.indexOf(image);
+
+    showLightboxImage(lightboxIndex);
+
+    const hasMultipleImages = lightboxImages.length > 1;
+
+    if (lightboxPrev) {
+      lightboxPrev.hidden = !hasMultipleImages;
+    }
+
+    if (lightboxNext) {
+      lightboxNext.hidden = !hasMultipleImages;
+    }
+
+    if (lightboxCounter) {
+      lightboxCounter.hidden = !hasMultipleImages;
+    }
+
+    imageLightbox.hidden = false;
+    imageLightbox.setAttribute("aria-hidden", "false");
+
+    window.requestAnimationFrame(function () {
+      imageLightbox.classList.add("is-visible");
+    });
+
+    if (lightboxClose) {
+      lightboxClose.focus();
+    }
+  }
+
+  if (imageLightbox) {
+    imageLightbox.addEventListener("click", function (event) {
+      if (event.target === imageLightbox) {
+        closeImageLightbox();
+      }
+    });
+  }
+
+  if (lightboxClose) {
+    lightboxClose.addEventListener("click", closeImageLightbox);
+  }
+
+  if (lightboxPrev) {
+    lightboxPrev.addEventListener("click", function () {
+      showLightboxImage(lightboxIndex - 1);
+    });
+  }
+
+  if (lightboxNext) {
+    lightboxNext.addEventListener("click", function () {
+      showLightboxImage(lightboxIndex + 1);
+    });
+  }
+
+  document.addEventListener("keydown", function (event) {
+    if (
+      event.key === "Escape" &&
+      imageLightbox &&
+      !imageLightbox.hidden
+    ) {
+      closeImageLightbox();
+    } else if (
+      imageLightbox &&
+      !imageLightbox.hidden &&
+      lightboxImages.length > 1 &&
+      event.key === "ArrowLeft"
+    ) {
+      showLightboxImage(lightboxIndex - 1);
+    } else if (
+      imageLightbox &&
+      !imageLightbox.hidden &&
+      lightboxImages.length > 1 &&
+      event.key === "ArrowRight"
+    ) {
+      showLightboxImage(lightboxIndex + 1);
+    }
+  });
+
+  document
+    .querySelectorAll(".carousel-slide img")
+    .forEach(function (image) {
+      image.tabIndex = 0;
+      image.setAttribute("role", "button");
+      image.setAttribute("aria-haspopup", "dialog");
+      image.setAttribute(
+        "aria-label",
+        "View larger image: " + image.alt
+      );
+
+      image.addEventListener("click", function () {
+        openImageLightbox(image);
+      });
+
+      image.addEventListener("keydown", function (event) {
+        if (
+          event.key === "Enter" ||
+          event.key === " "
+        ) {
+          event.preventDefault();
+          openImageLightbox(image);
+        }
+      });
+    });
+
+  function initCarousel(root) {
+    const slides = Array.prototype.slice.call(
+      root.querySelectorAll(".carousel-slide")
+    );
+
+    const prevBtn = root.querySelector(".carousel-prev");
+    const nextBtn = root.querySelector(".carousel-next");
+    const counter = root.querySelector(".carousel-counter");
+    const dotsWrap = root.querySelector(".carousel-dots");
+    const controls = root.querySelector(".carousel-controls");
+    const viewport = root.querySelector(".carousel-viewport");
+
+    const total = slides.length;
+    let index = 0;
+    let startX = 0;
+
+    if (total === 0) {
+      return;
+    }
+
+    if (total === 1 && controls) {
+      controls.classList.add("is-hidden");
+      slides[0].classList.add("is-active");
+      return;
+    }
+
+    if (dotsWrap) {
+      dotsWrap.innerHTML = "";
+
+      slides.forEach(function (_slide, i) {
+        const dot = document.createElement("button");
+
+        dot.type = "button";
+        dot.className = "carousel-dot";
+        dot.setAttribute(
+          "aria-label",
+          "Go to image " + (i + 1)
+        );
+
+        dot.addEventListener("click", function () {
+          show(i);
+        });
+
+        dotsWrap.appendChild(dot);
+      });
+    }
+
+    function show(nextIndex) {
+      index = (nextIndex + total) % total;
+
+      slides.forEach(function (slide, i) {
+        slide.classList.toggle(
+          "is-active",
+          i === index
+        );
+      });
+
+      if (counter) {
+        counter.textContent =
+          index + 1 + " / " + total;
+      }
+
+      if (dotsWrap) {
+        Array.prototype.forEach.call(
+          dotsWrap.children,
+          function (dot, i) {
+            dot.classList.toggle(
+              "is-active",
+              i === index
+            );
+          }
+        );
+      }
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", function () {
+        show(index - 1);
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", function () {
+        show(index + 1);
+      });
+    }
+
+    root.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        show(index - 1);
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        show(index + 1);
+      }
+    });
+
+    if (viewport) {
+      viewport.addEventListener(
+        "touchstart",
+        function (event) {
+          startX = event.changedTouches[0].clientX;
+        },
+        { passive: true }
+      );
+
+      viewport.addEventListener(
+        "touchend",
+        function (event) {
+          const dx =
+            event.changedTouches[0].clientX - startX;
+
+          if (Math.abs(dx) > 40) {
+            show(
+              dx < 0
+                ? index + 1
+                : index - 1
+            );
+          }
+        },
+        { passive: true }
+      );
+    }
+
+    show(0);
+  }
+
+  document
+    .querySelectorAll("[data-carousel]")
+    .forEach(initCarousel);
+
+  /*
+   * CONTACT FORM
+   * Web3Forms direct submission
+   * Includes validation, honeypot protection,
+   * submit-button locking, and 60-second cooldown.
+   */
+
+  const contactForm = document.getElementById("contact-form");
+
+  if (contactForm) {
+    const nameInput =
+      document.getElementById("contact-name");
+
+    const emailInput =
+      document.getElementById("contact-email");
+
+    const messageInput =
+      document.getElementById("contact-message");
+
+    const websiteInput =
+      document.getElementById("contact-website");
+
+    const submitBtn =
+      document.getElementById("contact-submit");
+
+    const status =
+      document.getElementById(
+        "contact-form-status"
+      );
+
+    const emailPattern =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const maxMessageLength = 2000;
+
+    const fallbackError =
+      "Sorry, your message could not be sent. Please try again or email me directly at christinemae.oro123@gmail.com.";
+
+    const cooldownSeconds = 60;
+
+    let cooldownTimer = null;
+
+    function setStatus(message, type) {
+      if (!status) {
+        return;
+      }
+
+      status.textContent = message;
+
+      status.classList.remove(
+        "is-success",
+        "is-error"
+      );
+
+      if (type) {
+        status.classList.add(type);
+      }
+    }
+
+    function setInvalid(input, invalid) {
+      if (!input) {
+        return;
+      }
+
+      if (invalid) {
+        input.setAttribute(
+          "aria-invalid",
+          "true"
+        );
+      } else {
+        input.removeAttribute(
+          "aria-invalid"
+        );
+      }
+    }
+
+    function setLoading(isLoading) {
+      if (!submitBtn) {
+        return;
+      }
+
+      submitBtn.disabled = isLoading;
+
+      submitBtn.setAttribute(
+        "aria-busy",
+        isLoading ? "true" : "false"
+      );
+
+      submitBtn.textContent = isLoading
+        ? "Sending..."
+        : "Send Message";
+    }
+
+    function startCooldown() {
+      if (!submitBtn) {
+        return;
+      }
+
+      let remaining = cooldownSeconds;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent =
+        "Wait " + remaining + "s";
+
+      window.clearInterval(cooldownTimer);
+
+      cooldownTimer = window.setInterval(
+        function () {
+          remaining -= 1;
+
+          if (remaining <= 0) {
+            window.clearInterval(
+              cooldownTimer
+            );
+
+            submitBtn.disabled = false;
+            submitBtn.textContent =
+              "Send Message";
+
+            return;
+          }
+
+          submitBtn.textContent =
+            "Wait " + remaining + "s";
+        },
+        1000
+      );
+    }
+
+    contactForm.addEventListener(
+      "submit",
+      function (event) {
+        event.preventDefault();
+
+        if (
+          submitBtn &&
+          submitBtn.disabled
+        ) {
+          return;
+        }
+
+        const name = nameInput
+          ? nameInput.value.trim()
+          : "";
+
+        const email = emailInput
+          ? emailInput.value.trim()
+          : "";
+
+        const message = messageInput
+          ? messageInput.value.trim()
+          : "";
+
+        const website = websiteInput
+          ? websiteInput.value.trim()
+          : "";
+
+        setInvalid(
+          nameInput,
+          !name
+        );
+
+        setInvalid(
+          emailInput,
+          !email ||
+            !emailPattern.test(email)
+        );
+
+        setInvalid(
+          messageInput,
+          !message ||
+            message.length >
+              maxMessageLength
+        );
+
+        if (!name || !email || !message) {
+          setStatus(
+            "Please complete all fields before sending your message.",
+            "is-error"
+          );
+
+          return;
+        }
+
+        if (!emailPattern.test(email)) {
+          setStatus(
+            "Please enter a valid email address.",
+            "is-error"
+          );
+
+          return;
+        }
+
+        if (
+          message.length >
+          maxMessageLength
+        ) {
+          setStatus(
+            "Please keep your message under " +
+              maxMessageLength +
+              " characters.",
+            "is-error"
+          );
+
+          return;
+        }
+
+        /*
+         * Honeypot protection.
+         * Legitimate visitors should leave this
+         * hidden field empty.
+         */
+        if (website) {
+          setStatus("", "");
+          return;
+        }
+
+        setLoading(true);
+        setStatus("", "");
+
+        const formData = new FormData();
+
+        /*
+         * KEEP YOUR WORKING WEB3FORMS ACCESS KEY HERE.
+         * Do not share the key publicly in chat.
+         */
+        formData.append(
+          "access_key",
+          "437eb70c-575f-4161-ac83-46f6794a6e1f"
+        );
+
+        formData.append(
+          "name",
+          name
+        );
+
+        formData.append(
+          "email",
+          email
+        );
+
+        formData.append(
+          "message",
+          message
+        );
+
+        formData.append(
+          "subject",
+          "New Portfolio Contact Message"
+        );
+
+        formData.append(
+          "from_name",
+          "Christine's Portfolio"
+        );
+
+        fetch(
+          "https://api.web3forms.com/submit",
+          {
+            method: "POST",
+            body: formData
+          }
+        )
+          .then(function (response) {
+            return response
+              .json()
+              .then(function (data) {
+                return {
+                  ok: response.ok,
+                  data: data
+                };
+              });
+          })
+          .then(function (result) {
+            if (
+              result.ok &&
+              result.data &&
+              result.data.success
+            ) {
+              setStatus(
+                "Message sent successfully! I'll get back to you as soon as possible.",
+                "is-success"
+              );
+
+              contactForm.reset();
+
+              setInvalid(
+                nameInput,
+                false
+              );
+
+              setInvalid(
+                emailInput,
+                false
+              );
+
+              setInvalid(
+                messageInput,
+                false
+              );
+
+              setLoading(false);
+
+              startCooldown();
+
+              return;
+            }
+
+            setLoading(false);
+
+            setStatus(
+              fallbackError,
+              "is-error"
+            );
+          })
+          .catch(function () {
+            setLoading(false);
+
+            setStatus(
+              fallbackError,
+              "is-error"
+            );
+          });
+      }
+    );
+  }
+})();
