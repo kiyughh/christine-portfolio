@@ -38,7 +38,9 @@
           return response.arrayBuffer();
         })
         .then(function (buffer) {
-          const blob = new Blob([buffer], { type: "application/octet-stream" });
+          const blob = new Blob([buffer], {
+            type: "application/octet-stream"
+          });
           const objectUrl = URL.createObjectURL(blob);
           const tempLink = document.createElement("a");
           tempLink.href = objectUrl;
@@ -56,9 +58,13 @@
 
   const projectList = document.querySelector(".project-list");
   if (projectList) {
-    Array.prototype.slice.call(projectList.querySelectorAll(".project-card"))
+    Array.prototype.slice
+      .call(projectList.querySelectorAll(".project-card"))
       .sort(function (a, b) {
-        return Number(a.getAttribute("data-project-order")) - Number(b.getAttribute("data-project-order"));
+        return (
+          Number(a.getAttribute("data-project-order")) -
+          Number(b.getAttribute("data-project-order"))
+        );
       })
       .forEach(function (card) {
         projectList.appendChild(card);
@@ -74,19 +80,35 @@
       });
 
       document.querySelectorAll(".project-card").forEach(function (card) {
-        const categories = (card.getAttribute("data-categories") || "").split(" ");
-        const show = filter === "all" || categories.indexOf(filter) !== -1;
+        const categories = (
+          card.getAttribute("data-categories") || ""
+        ).split(" ");
+
+        const show =
+          filter === "all" || categories.indexOf(filter) !== -1;
+
         card.classList.toggle("is-hidden", !show);
       });
     });
   });
 
   const imageLightbox = document.getElementById("image-lightbox");
-  const lightboxImage = imageLightbox ? imageLightbox.querySelector(".image-lightbox-image") : null;
-  const lightboxClose = imageLightbox ? imageLightbox.querySelector(".image-lightbox-close") : null;
-  const lightboxPrev = imageLightbox ? imageLightbox.querySelector(".image-lightbox-prev") : null;
-  const lightboxNext = imageLightbox ? imageLightbox.querySelector(".image-lightbox-next") : null;
-  const lightboxCounter = imageLightbox ? imageLightbox.querySelector(".image-lightbox-counter") : null;
+  const lightboxImage = imageLightbox
+    ? imageLightbox.querySelector(".image-lightbox-image")
+    : null;
+  const lightboxClose = imageLightbox
+    ? imageLightbox.querySelector(".image-lightbox-close")
+    : null;
+  const lightboxPrev = imageLightbox
+    ? imageLightbox.querySelector(".image-lightbox-prev")
+    : null;
+  const lightboxNext = imageLightbox
+    ? imageLightbox.querySelector(".image-lightbox-next")
+    : null;
+  const lightboxCounter = imageLightbox
+    ? imageLightbox.querySelector(".image-lightbox-counter")
+    : null;
+
   let lastFocusedImage = null;
   let lightboxImages = [];
   let lightboxIndex = 0;
@@ -95,12 +117,17 @@
   function showLightboxImage(index) {
     if (!lightboxImages.length || !lightboxImage) return;
 
-    lightboxIndex = (index + lightboxImages.length) % lightboxImages.length;
+    lightboxIndex =
+      (index + lightboxImages.length) % lightboxImages.length;
+
     const image = lightboxImages[lightboxIndex];
+
     lightboxImage.src = image.src;
     lightboxImage.alt = image.alt;
+
     if (lightboxCounter) {
-      lightboxCounter.textContent = (lightboxIndex + 1) + " / " + lightboxImages.length;
+      lightboxCounter.textContent =
+        lightboxIndex + 1 + " / " + lightboxImages.length;
     }
   }
 
@@ -108,18 +135,24 @@
     if (!imageLightbox || imageLightbox.hidden) return;
 
     imageLightbox.classList.remove("is-visible");
+
     window.clearTimeout(lightboxCloseTimer);
+
     lightboxCloseTimer = window.setTimeout(function () {
       imageLightbox.hidden = true;
       imageLightbox.setAttribute("aria-hidden", "true");
+
       if (lightboxImage) {
         lightboxImage.removeAttribute("src");
         lightboxImage.alt = "";
       }
+
       lightboxImages = [];
+
       if (lightboxPrev) lightboxPrev.hidden = true;
       if (lightboxNext) lightboxNext.hidden = true;
       if (lightboxCounter) lightboxCounter.hidden = true;
+
       if (lastFocusedImage) {
         lastFocusedImage.focus();
         lastFocusedImage = null;
@@ -131,34 +164,65 @@
     if (!imageLightbox || !lightboxImage) return;
 
     window.clearTimeout(lightboxCloseTimer);
+
     lastFocusedImage = image;
+
     const carousel = image.closest("[data-carousel]");
-    lightboxImages = carousel ? Array.prototype.slice.call(carousel.querySelectorAll(".carousel-slide img")) : [image];
+
+    lightboxImages = carousel
+      ? Array.prototype.slice.call(
+          carousel.querySelectorAll(".carousel-slide img")
+        )
+      : [image];
+
     lightboxIndex = lightboxImages.indexOf(image);
+
     showLightboxImage(lightboxIndex);
+
     const hasMultipleImages = lightboxImages.length > 1;
-    if (lightboxPrev) lightboxPrev.hidden = !hasMultipleImages;
-    if (lightboxNext) lightboxNext.hidden = !hasMultipleImages;
-    if (lightboxCounter) lightboxCounter.hidden = !hasMultipleImages;
+
+    if (lightboxPrev) {
+      lightboxPrev.hidden = !hasMultipleImages;
+    }
+
+    if (lightboxNext) {
+      lightboxNext.hidden = !hasMultipleImages;
+    }
+
+    if (lightboxCounter) {
+      lightboxCounter.hidden = !hasMultipleImages;
+    }
+
     imageLightbox.hidden = false;
     imageLightbox.setAttribute("aria-hidden", "false");
+
     window.requestAnimationFrame(function () {
       imageLightbox.classList.add("is-visible");
     });
-    if (lightboxClose) lightboxClose.focus();
+
+    if (lightboxClose) {
+      lightboxClose.focus();
+    }
   }
 
   if (imageLightbox) {
     imageLightbox.addEventListener("click", function (event) {
-      if (event.target === imageLightbox) closeImageLightbox();
+      if (event.target === imageLightbox) {
+        closeImageLightbox();
+      }
     });
   }
-  if (lightboxClose) lightboxClose.addEventListener("click", closeImageLightbox);
+
+  if (lightboxClose) {
+    lightboxClose.addEventListener("click", closeImageLightbox);
+  }
+
   if (lightboxPrev) {
     lightboxPrev.addEventListener("click", function () {
       showLightboxImage(lightboxIndex - 1);
     });
   }
+
   if (lightboxNext) {
     lightboxNext.addEventListener("click", function () {
       showLightboxImage(lightboxIndex + 1);
@@ -166,39 +230,64 @@
   }
 
   document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && imageLightbox && !imageLightbox.hidden) {
+    if (
+      event.key === "Escape" &&
+      imageLightbox &&
+      !imageLightbox.hidden
+    ) {
       closeImageLightbox();
-    } else if (imageLightbox && !imageLightbox.hidden && lightboxImages.length > 1 && event.key === "ArrowLeft") {
+    } else if (
+      imageLightbox &&
+      !imageLightbox.hidden &&
+      lightboxImages.length > 1 &&
+      event.key === "ArrowLeft"
+    ) {
       showLightboxImage(lightboxIndex - 1);
-    } else if (imageLightbox && !imageLightbox.hidden && lightboxImages.length > 1 && event.key === "ArrowRight") {
+    } else if (
+      imageLightbox &&
+      !imageLightbox.hidden &&
+      lightboxImages.length > 1 &&
+      event.key === "ArrowRight"
+    ) {
       showLightboxImage(lightboxIndex + 1);
     }
   });
 
-  document.querySelectorAll(".carousel-slide img").forEach(function (image) {
-    image.tabIndex = 0;
-    image.setAttribute("role", "button");
-    image.setAttribute("aria-haspopup", "dialog");
-    image.setAttribute("aria-label", "View larger image: " + image.alt);
-    image.addEventListener("click", function () {
-      openImageLightbox(image);
-    });
-    image.addEventListener("keydown", function (event) {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
+  document
+    .querySelectorAll(".carousel-slide img")
+    .forEach(function (image) {
+      image.tabIndex = 0;
+      image.setAttribute("role", "button");
+      image.setAttribute("aria-haspopup", "dialog");
+      image.setAttribute(
+        "aria-label",
+        "View larger image: " + image.alt
+      );
+
+      image.addEventListener("click", function () {
         openImageLightbox(image);
-      }
+      });
+
+      image.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openImageLightbox(image);
+        }
+      });
     });
-  });
 
   function initCarousel(root) {
-    const slides = Array.prototype.slice.call(root.querySelectorAll(".carousel-slide"));
+    const slides = Array.prototype.slice.call(
+      root.querySelectorAll(".carousel-slide")
+    );
+
     const prevBtn = root.querySelector(".carousel-prev");
     const nextBtn = root.querySelector(".carousel-next");
     const counter = root.querySelector(".carousel-counter");
     const dotsWrap = root.querySelector(".carousel-dots");
     const controls = root.querySelector(".carousel-controls");
     const viewport = root.querySelector(".carousel-viewport");
+
     const total = slides.length;
     let index = 0;
     let startX = 0;
@@ -215,30 +304,40 @@
 
     if (dotsWrap) {
       dotsWrap.innerHTML = "";
+
       slides.forEach(function (_slide, i) {
         const dot = document.createElement("button");
+
         dot.type = "button";
         dot.className = "carousel-dot";
         dot.setAttribute("aria-label", "Go to image " + (i + 1));
+
         dot.addEventListener("click", function () {
           show(i);
         });
+
         dotsWrap.appendChild(dot);
       });
     }
 
     function show(nextIndex) {
       index = (nextIndex + total) % total;
+
       slides.forEach(function (slide, i) {
         slide.classList.toggle("is-active", i === index);
       });
+
       if (counter) {
-        counter.textContent = (index + 1) + " / " + total;
+        counter.textContent = index + 1 + " / " + total;
       }
+
       if (dotsWrap) {
-        Array.prototype.forEach.call(dotsWrap.children, function (dot, i) {
-          dot.classList.toggle("is-active", i === index);
-        });
+        Array.prototype.forEach.call(
+          dotsWrap.children,
+          function (dot, i) {
+            dot.classList.toggle("is-active", i === index);
+          }
+        );
       }
     }
 
@@ -259,6 +358,7 @@
         event.preventDefault();
         show(index - 1);
       }
+
       if (event.key === "ArrowRight") {
         event.preventDefault();
         show(index + 1);
@@ -266,24 +366,42 @@
     });
 
     if (viewport) {
-      viewport.addEventListener("touchstart", function (event) {
-        startX = event.changedTouches[0].clientX;
-      }, { passive: true });
+      viewport.addEventListener(
+        "touchstart",
+        function (event) {
+          startX = event.changedTouches[0].clientX;
+        },
+        { passive: true }
+      );
 
-      viewport.addEventListener("touchend", function (event) {
-        const dx = event.changedTouches[0].clientX - startX;
-        if (Math.abs(dx) > 40) {
-          show(dx < 0 ? index + 1 : index - 1);
-        }
-      }, { passive: true });
+      viewport.addEventListener(
+        "touchend",
+        function (event) {
+          const dx =
+            event.changedTouches[0].clientX - startX;
+
+          if (Math.abs(dx) > 40) {
+            show(dx < 0 ? index + 1 : index - 1);
+          }
+        },
+        { passive: true }
+      );
     }
 
     show(0);
   }
 
-  document.querySelectorAll("[data-carousel]").forEach(initCarousel);
+  document
+    .querySelectorAll("[data-carousel]")
+    .forEach(initCarousel);
+
+  /*
+   * CONTACT FORM
+   * Sends directly to Web3Forms.
+   */
 
   const contactForm = document.getElementById("contact-form");
+
   if (contactForm) {
     const nameInput = document.getElementById("contact-name");
     const emailInput = document.getElementById("contact-email");
@@ -291,20 +409,34 @@
     const websiteInput = document.getElementById("contact-website");
     const submitBtn = document.getElementById("contact-submit");
     const status = document.getElementById("contact-form-status");
+
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const maxMessageLength = 2000;
-    const fallbackError = "Sorry, your message could not be sent. Please try again or email me directly at christinemae.oro123@gmail.com.";
-    const duplicateMessage = "You’ve already submitted a message. Please wait 24 hours before submitting another message.";
+
+    const fallbackError =
+      "Sorry, your message could not be sent. Please try again or email me directly at christinemae.oro123@gmail.com.";
+
+    const duplicateMessage =
+      "You’ve already submitted a message. Please wait 24 hours before submitting another message.";
 
     function setStatus(message, type) {
       if (!status) return;
+
       status.textContent = message;
-      status.classList.remove("is-success", "is-error");
-      if (type) status.classList.add(type);
+
+      status.classList.remove(
+        "is-success",
+        "is-error"
+      );
+
+      if (type) {
+        status.classList.add(type);
+      }
     }
 
     function setInvalid(input, invalid) {
       if (!input) return;
+
       if (invalid) {
         input.setAttribute("aria-invalid", "true");
       } else {
@@ -314,84 +446,169 @@
 
     function setLoading(isLoading) {
       if (!submitBtn) return;
+
       submitBtn.disabled = isLoading;
-      submitBtn.setAttribute("aria-busy", isLoading ? "true" : "false");
-      submitBtn.textContent = isLoading ? "Sending..." : "Send Message";
+
+      submitBtn.setAttribute(
+        "aria-busy",
+        isLoading ? "true" : "false"
+      );
+
+      submitBtn.textContent = isLoading
+        ? "Sending..."
+        : "Send Message";
     }
 
-    contactForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-      if (submitBtn && submitBtn.disabled) return;
+    contactForm.addEventListener(
+      "submit",
+      async function (event) {
+        event.preventDefault();
 
-      const name = nameInput ? nameInput.value.trim() : "";
-      const email = emailInput ? emailInput.value.trim() : "";
-      const message = messageInput ? messageInput.value.trim() : "";
-      const website = websiteInput ? websiteInput.value.trim() : "";
+        if (submitBtn && submitBtn.disabled) {
+          return;
+        }
 
-      setInvalid(nameInput, !name);
-      setInvalid(emailInput, !email || !emailPattern.test(email));
-      setInvalid(messageInput, !message || message.length > maxMessageLength);
+        const name = nameInput
+          ? nameInput.value.trim()
+          : "";
 
-      if (!name || !email || !message) {
-        setStatus("Please complete all fields before sending your message.", "is-error");
-        return;
-      }
+        const email = emailInput
+          ? emailInput.value.trim()
+          : "";
 
-      if (!emailPattern.test(email)) {
-        setStatus("Please enter a valid email address.", "is-error");
-        return;
-      }
+        const message = messageInput
+          ? messageInput.value.trim()
+          : "";
 
-      if (message.length > maxMessageLength) {
-        setStatus("Please keep your message under " + maxMessageLength + " characters.", "is-error");
-        return;
-      }
+        const website = websiteInput
+          ? websiteInput.value.trim()
+          : "";
 
-      setLoading(true);
-      setStatus("", "");
+        setInvalid(nameInput, !name);
 
-      fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          message: message,
-          website: website
-        })
-      })
-        .then(function (response) {
-          return response.json()
-            .catch(function () {
-              return {};
-            })
-            .then(function (data) {
-              return { ok: response.ok, status: response.status, data: data };
-            });
-        })
-        .then(function (result) {
-          if (result.data && result.data.error === "duplicate_email") {
-            setStatus(duplicateMessage, "is-error");
-            return;
-          }
+        setInvalid(
+          emailInput,
+          !email || !emailPattern.test(email)
+        );
 
-          if (result.ok && result.data && result.data.ok) {
-            setStatus("Message sent successfully! I'll get back to you as soon as possible.", "is-success");
+        setInvalid(
+          messageInput,
+          !message ||
+            message.length > maxMessageLength
+        );
+
+        if (!name || !email || !message) {
+          setStatus(
+            "Please complete all fields before sending your message.",
+            "is-error"
+          );
+          return;
+        }
+
+        if (!emailPattern.test(email)) {
+          setStatus(
+            "Please enter a valid email address.",
+            "is-error"
+          );
+          return;
+        }
+
+        if (message.length > maxMessageLength) {
+          setStatus(
+            "Please keep your message under " +
+              maxMessageLength +
+              " characters.",
+            "is-error"
+          );
+          return;
+        }
+
+        setLoading(true);
+        setStatus("", "");
+
+        const formData = new FormData();
+
+        formData.append(
+          "access_key",
+          "YOUR_WEB3FORMS_ACCESS_KEY"
+        );
+
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("message", message);
+
+        if (website) {
+          formData.append("website", website);
+        }
+
+        formData.append(
+          "subject",
+          "New Portfolio Contact Message"
+        );
+
+        formData.append(
+          "from_name",
+          "Christine's Portfolio"
+        );
+
+        try {
+          const response = await fetch(
+            "https://api.web3forms.com/submit",
+            {
+              method: "POST",
+              body: formData
+            }
+          );
+
+          const data = await response.json();
+
+          if (data.success) {
+            setStatus(
+              "Message sent successfully! I'll get back to you as soon as possible.",
+              "is-success"
+            );
+
             contactForm.reset();
+
             setInvalid(nameInput, false);
             setInvalid(emailInput, false);
             setInvalid(messageInput, false);
+
             return;
           }
 
-          setStatus(fallbackError, "is-error");
-        })
-        .catch(function () {
-          setStatus(fallbackError, "is-error");
-        })
-        .then(function () {
+          if (
+            data.message &&
+            data.message
+              .toLowerCase()
+              .includes("duplicate")
+          ) {
+            setStatus(
+              duplicateMessage,
+              "is-error"
+            );
+            return;
+          }
+
+          throw new Error(
+            data.message || "Unable to send message."
+          );
+
+        } catch (error) {
+          console.error(
+            "Web3Forms error:",
+            error
+          );
+
+          setStatus(
+            fallbackError,
+            "is-error"
+          );
+
+        } finally {
           setLoading(false);
-        });
-    });
+        }
+      }
+    );
   }
 })();
